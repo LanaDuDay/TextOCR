@@ -1,8 +1,14 @@
+import os
 import cv2
 import numpy as np
-from img2table.document import Image
+from img2table.document import Image #type: ignore
+from img2table.ocr import PaddleOCR  #type: ignore
 from io import BytesIO
 import matplotlib.pyplot as plt
+
+import cv2
+print(dir(cv2.ximgproc))
+
 
 class ImageProcessor:
     def __init__(self, img_path=None, img_bytes=None, file_like=None):
@@ -58,15 +64,57 @@ class ImageProcessor:
         plt.axis('off')
         plt.show()
 
-# Usage example
-img_path = r"C:\Users\Admin\Downloads\AI_DETECT_MODEL_DOCUMENT\pagesPdf\page2_NMQ.jpg" # Replace with your image path
-processor = ImageProcessor(img_path=img_path)
-processor.to_grayscale()
-processor.to_binary()
-processor.increase_contrast()
 
-# Display images
-processor.show_image('original')
-processor.show_image('grayscale')
-processor.show_image('binary')
-processor.show_image('contrast')
+# # Usage example
+# img_path = r"C:\Users\Admin\Downloads\AI_DETECT_MODEL_DOCUMENT\pagesPdf\page2_NMQ.jpg" # Replace with your image path
+# processor = ImageProcessor(img_path=img_path)
+# processor.to_grayscale()
+# processor.to_binary()
+# processor.increase_contrast()
+
+# # Display images
+# processor.show_image('original')
+# processor.show_image('grayscale')
+# processor.show_image('binary')
+# processor.show_image('contrast')
+
+
+# Load the image
+img_from_path = Image(r"C:\Users\Admin\Downloads\AI_DETECT_MODEL_DOCUMENT\Clean_code\table_area_462.png")
+# Initialize the OCR engine
+
+# Extract tables with custom parameters
+extracted_tables = img_from_path.extract_tables(       # Use PaddleOCR for text extraction
+    implicit_rows=True,       # Split implicit rows
+    borderless_tables=True,   # Detect borderless tables
+    min_confidence=10        # Set minimum confidence level for text extraction
+)
+
+print(type(extracted_tables))
+print(extracted_tables)
+
+import cv2
+import matplotlib.pyplot as plt
+
+img_from_path = r"C:\Users\Admin\Downloads\AI_DETECT_MODEL_DOCUMENT\Clean_code\table_area_462.png" # Update this with the actual path to your image
+
+table_img = cv2.imread(img_from_path)
+if table_img is None:
+    raise ValueError(f"Could not read the image from the path: {img_from_path}")
+
+table_cells = []
+for table in extracted_tables:
+    for row in table.content.values():
+        for cell in row:
+            table_cells.append(cell)
+            cv2.rectangle(table_img, (cell.bbox.x1, cell.bbox.y1), (cell.bbox.x2, cell.bbox.y2), (0, 0, 255), 2)
+
+# Convert image from BGR to RGB (matplotlib expects RGB images)
+table_img_rgb = cv2.cvtColor(table_img, cv2.COLOR_BGR2RGB)
+
+# Display the image using matplotlib
+plt.imshow(table_img_rgb)
+plt.title("Table Image")
+plt.axis('off')  # Hide axis
+plt.show()
+
