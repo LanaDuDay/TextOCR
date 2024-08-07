@@ -102,6 +102,7 @@ class TableKeyTitleValue:
 
     def calculate_distance(self, y1_next, y2, stt_first):
         '''Tinh vùng chứa tiêu đề của bảng'''
+        print("stt_first",stt_first)
         if int(stt_first) > 1:
             return abs(y1_next - y2) * (0.6 / int(stt_first))
         return abs(y1_next - y2) * 0.7

@@ -1,0 +1,8 @@
+ pip install --prefer-binary paddleocr
+!pip install protobuf==3.20.0
+!git clone https://github.com/PaddlePaddle/PaddleOCR.git
+!wget https://paddleocr.bj.bcebos.com/whl/layoutparser-0.0.0-py3-none-any.whl
+!pip install -U layoutparser-0.0.0-py3-none-any.whl
+!pip install paddlepaddle==2.6.0
+pip install torch==2.3.1 torchvision==0.18.1
+pip install -quiet vietocr

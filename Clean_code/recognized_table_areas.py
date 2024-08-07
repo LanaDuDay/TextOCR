@@ -3,7 +3,7 @@ Module: recognized_table_areas
 Mô tả:
     Xử lý và nhận diện các vùng bảng từ layout tài liệu.  
 """
-import layoutparser as lp
+import layoutparser as lp #type: ignore
 import Config as cf
 
 class TableAreaDetector:
